@@ -22,8 +22,6 @@ class TestConsumer(WebsocketConsumer):
             self.channel_name
         )
 
-        self.disconnect()
-
     def receive(self, text_data):
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
