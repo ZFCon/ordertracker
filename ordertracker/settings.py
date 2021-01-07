@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # My installations
+    'channels',
+
     # My Apps
     'order',
 ]
@@ -71,7 +74,18 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ordertracker.wsgi.application'
+# we don't need this anymore because we are running at asgi
+# WSGI_APPLICATION = 'ordertracker.wsgi.application'
+
+ASGI_APPLICATION = "ordertracker.asgi.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [(os.environ.get('REDIS_HOST', '127.0.0.1'), os.environ.get('REDIS_PORT', 6379))],
+        },
+    },
+}
 
 
 # Database
