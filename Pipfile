@@ -8,10 +8,8 @@ pycodestyle = "*"
 autopep8 = "*"
 
 [packages]
-python-decouple = "*"
 django = "*"
 ipython = "*"
-sys = "*"
 
 [requires]
 python_version = "3.7"
