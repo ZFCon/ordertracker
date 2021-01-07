@@ -11,3 +11,6 @@ class Order(models.Model):
     class Meta:
         verbose_name = _('Order')
         verbose_name_plural = _('Orders')
+
+    def __str__(self):
+        return self.request

@@ -5,4 +5,4 @@ from .models import *
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['request', 'doer']
