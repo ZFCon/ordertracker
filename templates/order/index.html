@@ -1,32 +1,31 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="utf-8" />
-    <title>Chat Room</title>
-</head>
+{% block content %}
+<div class="jumbotron">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">First item <span class="badge badge-success">Done</span></li>
+        <li class="list-group-item">Second item</li>
+        <li class="list-group-item">Third item</li>
+        <li class="list-group-item">Fourth item</li>
+    </ul>
+</div>
+{% endblock content %}
 
-<body>
-    <center>
-        <textarea id="chat-log" cols="100" rows="30"></textarea>
-    </center>
+{% block js %}
+<script>
+    const chatSocket = new WebSocket(
+        'ws://' + window.location.host
+        + '/test/'
+    );
+    let chatLog = document.getElementById('chat-log');
 
-    <script>
-        const chatSocket = new WebSocket(
-            'ws://' + window.location.host
-            + '/test/'
-        );
-        let chatLog = document.getElementById('chat-log');
+    chatSocket.onmessage = function (e) {
+        const data = e.data;
+        chatLog.innerHTML += data;
+    };
 
-        chatSocket.onmessage = function (e) {
-            const data = e.data;
-            chatLog.innerHTML += data;
-        };
-
-        chatSocket.onclose = function (e) {
-            console.error('Chat socket closed unexpectedly');
-        };
-    </script>
-</body>
-
-</html>
+    chatSocket.onclose = function (e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+</script>
+{% endblock js %}

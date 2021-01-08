@@ -1,8 +1,13 @@
+from django.db.models import signals
+from django.dispatch import receiver
 from channels.generic.websocket import WebsocketConsumer
+from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 import json
 import logging
+
+from .models import *
 
 
 class TestConsumer(WebsocketConsumer):
@@ -38,3 +43,12 @@ class TestConsumer(WebsocketConsumer):
 
         # Send message to WebSocket
         self.send(text_data=data)
+
+    @staticmethod
+    @receiver(signals.post_save, sender=Order)
+    def order_offer_observer(sender, instance, **kwargs):
+        layer = get_channel_layer()
+        async_to_sync(layer.group_send)('test', {
+            'type': 'data',
+            'data': "something updated."
+        })
