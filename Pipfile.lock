@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "44c0f6a550cc4f788db25939dec48881cb22d986d8e41202f67ccdaf74db79c5"
+            "sha256": "95f9db8063ac26da987dda325443c4d54c76213e3b88f12e62e05720d2754541"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -178,6 +178,22 @@
             "index": "pypi",
             "version": "==3.1.5"
         },
+        "django-cors-headers": {
+            "hashes": [
+                "sha256:5665fc1b1aabf1b678885cf6f8f8bd7da36ef0a978375e767d491b48d3055d8f",
+                "sha256:ba898dd478cd4be3a38ebc3d8729fa4d044679f8c91b2684edee41129d7e968a"
+            ],
+            "index": "pypi",
+            "version": "==3.6.0"
+        },
+        "djangorestframework": {
+            "hashes": [
+                "sha256:0209bafcb7b5010fdfec784034f059d512256424de2a0f084cb82b096d6dd6a7",
+                "sha256:0898182b4737a7b584a2c73735d89816343369f259fea932d90dc78e35d8ac33"
+            ],
+            "index": "pypi",
+            "version": "==3.12.2"
+        },
         "hiredis": {
             "hashes": [
                 "sha256:06a039208f83744a702279b894c8cf24c14fd63c59cd917dcde168b79eef0680",
@@ -231,10 +247,10 @@
         },
         "hyperlink": {
             "hashes": [
-                "sha256:47fcc7cd339c6cb2444463ec3277bdcfe142c8b1daf2160bdd52248deec815af",
-                "sha256:c528d405766f15a2c536230de7e160b65a08e20264d8891b3eb03307b0df3c63"
+                "sha256:427af957daa58bc909471c6c40f74c5450fa123dd093fc53efd2e91d2705a56b",
+                "sha256:e6b14c37ecb73e89c77d78cdb4c2cc8f3fb59a885c5b3f819ff4ed80f25af1b4"
             ],
-            "version": "==20.0.1"
+            "version": "==21.0.0"
         },
         "idna": {
             "hashes": [
@@ -321,10 +337,10 @@
         },
         "prompt-toolkit": {
             "hashes": [
-                "sha256:45b154489d89dc41cce86a069a65f3886206518e7ca93fa9d7dad70546c78d54",
-                "sha256:c5eeab58dd31b541442825d7870777f2a2f764eb5fda03334d5219cd84b9722f"
+                "sha256:ac329c69bd8564cb491940511957312c7b8959bb5b3cf3582b406068a51d5bb7",
+                "sha256:b8b3d0bde65da350290c46a8f54f336b3cbf5464a4ac11239668d986852e79d5"
             ],
-            "version": "==3.0.9"
+            "version": "==3.0.10"
         },
         "pyasn1": {
             "hashes": [

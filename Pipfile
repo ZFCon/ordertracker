@@ -12,6 +12,8 @@ django = "*"
 ipython = "*"
 channels = "*"
 channels-redis = "*"
+djangorestframework = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.7"
