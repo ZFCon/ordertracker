@@ -8,13 +8,16 @@ import json
 import logging
 
 from .models import *
+from .serializers import *
 
 
-class TestConsumer(WebsocketConsumer):
+class OrderConsumer(WebsocketConsumer):
+    group_name = "orders"
+
     def connect(self):
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
-            'test',
+            self.group_name,
             self.channel_name
         )
 
@@ -23,19 +26,20 @@ class TestConsumer(WebsocketConsumer):
     def disconnect(self, close_code):
         # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
-            'test',
+            self.group_name,
             self.channel_name
         )
 
-    def receive(self, text_data):
-        # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
-            'test',
-            {
-                'type': 'data',
-                'data': text_data
-            }
-        )
+    # This consumer should not have a receive method
+    # def receive(self, text_data):
+    #     # Send message to room group
+    #     async_to_sync(self.channel_layer.group_send)(
+    #         'test',
+    #         {
+    #             'type': 'data',
+    #             'data': text_data
+    #         }
+    #     )
 
     # Receive message from room group
     def data(self, event):
@@ -46,9 +50,11 @@ class TestConsumer(WebsocketConsumer):
 
     @staticmethod
     @receiver(signals.post_save, sender=Order)
-    def order_offer_observer(sender, instance, **kwargs):
+    def order_observer(sender, instance, **kwargs):
         layer = get_channel_layer()
-        async_to_sync(layer.group_send)('test', {
+        data = OrderSerializer(instance=instance).data
+        data = json.dumps(data)
+        async_to_sync(layer.group_send)('orders', {
             'type': 'data',
-            'data': "something updated."
+            'data': data,
         })
