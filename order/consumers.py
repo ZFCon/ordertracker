@@ -1,6 +1,6 @@
 from django.db.models import signals
 from django.dispatch import receiver
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import WebsocketConsumer, JsonWebsocketConsumer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
@@ -11,7 +11,7 @@ from .models import *
 from .serializers import *
 
 
-class OrderConsumer(WebsocketConsumer):
+class OrderConsumer(JsonWebsocketConsumer):
     group_name = "orders"
 
     def connect(self):
@@ -30,31 +30,51 @@ class OrderConsumer(WebsocketConsumer):
             self.channel_name
         )
 
-    # This consumer should not have a receive method
-    # def receive(self, text_data):
-    #     # Send message to room group
-    #     async_to_sync(self.channel_layer.group_send)(
-    #         'test',
-    #         {
-    #             'type': 'data',
-    #             'data': text_data
-    #         }
-    #     )
+    def order_saved(self, event):
+        order = event['order']
+        created = event['created']
+        content_type = 'created' if created else 'updated'
 
-    # Receive message from room group
-    def data(self, event):
-        data = event['data']
+        # the content that will go for the front-end
+        content = {
+            "type": content_type,
+            "order": order,
+        }
 
         # Send message to WebSocket
-        self.send(text_data=data)
+        self.send_json(content=content)
+
+    def order_deleted(self, event):
+        order = event['order']
+
+        # the content that will go for the front-end
+        content = {
+            "type": 'deleted',
+            "order": order,
+        }
+
+        # Send message to WebSocket
+        self.send_json(content=content)
 
     @staticmethod
     @receiver(signals.post_save, sender=Order)
-    def order_observer(sender, instance, **kwargs):
+    def order_observer_saved(sender, instance, created, **kwargs):
         layer = get_channel_layer()
-        data = OrderSerializer(instance=instance).data
-        data = json.dumps(data)
+        order = OrderSerializer(instance=instance).data
+
         async_to_sync(layer.group_send)('orders', {
-            'type': 'data',
-            'data': data,
+            'type': 'order.saved',
+            'created': created,
+            'order': order,
+        })
+
+    @staticmethod
+    @receiver(signals.post_delete, sender=Order)
+    def order_observer_deleted(sender, instance, **kwargs):
+        layer = get_channel_layer()
+        order = OrderSerializer(instance=instance).data
+
+        async_to_sync(layer.group_send)('orders', {
+            'type': 'order.deleted',
+            'order': order,
         })
