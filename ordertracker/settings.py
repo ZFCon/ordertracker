@@ -42,10 +42,12 @@ INSTALLED_APPS = [
     # My installations
     'channels',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
 
     # My Apps
     'order',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +78,16 @@ TEMPLATES = [
         },
     },
 ]
+
+# API Auth
+# https://www.django-rest-framework.org/api-guide/authentication/
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 
 # we don't need this anymore because we are running at asgi
 # WSGI_APPLICATION = 'ordertracker.wsgi.application'
