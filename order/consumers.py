@@ -1,6 +1,6 @@
 from django.db.models import signals
 from django.dispatch import receiver
-from channels.generic.websocket import WebsocketConsumer, JsonWebsocketConsumer
+from channels.generic.websocket import JsonWebsocketConsumer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
@@ -8,7 +8,6 @@ import json
 import logging
 
 from .models import *
-from .serializers import *
 
 
 class OrderConsumer(JsonWebsocketConsumer):
@@ -31,26 +30,26 @@ class OrderConsumer(JsonWebsocketConsumer):
         )
 
     def order_saved(self, event):
-        order = event['order']
+        id = event['id']
         created = event['created']
         content_type = 'created' if created else 'updated'
 
         # the content that will go for the front-end
         content = {
             "type": content_type,
-            "order": order,
+            "id": id,
         }
 
         # Send message to WebSocket
         self.send_json(content=content)
 
     def order_deleted(self, event):
-        order = event['order']
+        id = event['id']
 
         # the content that will go for the front-end
         content = {
             "type": 'deleted',
-            "order": order,
+            "id": id,
         }
 
         # Send message to WebSocket
@@ -60,21 +59,19 @@ class OrderConsumer(JsonWebsocketConsumer):
     @receiver(signals.post_save, sender=Order)
     def order_observer_saved(sender, instance, created, **kwargs):
         layer = get_channel_layer()
-        order = OrderSerializer(instance=instance).data
 
         async_to_sync(layer.group_send)('orders', {
             'type': 'order.saved',
             'created': created,
-            'order': order,
+            'id': instance.id,
         })
 
     @staticmethod
     @receiver(signals.post_delete, sender=Order)
     def order_observer_deleted(sender, instance, **kwargs):
         layer = get_channel_layer()
-        order = OrderSerializer(instance=instance).data
 
         async_to_sync(layer.group_send)('orders', {
             'type': 'order.deleted',
-            'order': order,
+            'id': instance.id,
         })
