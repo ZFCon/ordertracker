@@ -3,12 +3,36 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
 
+class DoerRequest(models.Model):
+    order = models.ForeignKey(
+        'Order', on_delete=models.CASCADE, related_name='requests')
+
+    class Status(models.TextChoices):
+        PENDING = 'pending', _('Pending')
+        ACCEPTED = 'accepted', _('Accepted')
+        REFUSED = 'refused', _('Refused')
+    status = models.CharField(
+        max_length=25, choices=Status.choices, default=Status.PENDING)
+
+    doer = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+
+
 class Order(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE, related_name='orders')
     request = models.TextField(help_text=_('Say what you want.'))
-    doer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
-                             null=True, blank=True, help_text=_('This should have the user that agreed to do it.'))
+
+    @property
+    def doer(self):
+        doer = None
+        request = self.requests.filter(
+            status=DoerRequest.Status.ACCEPTED).first()
+
+        if(request):
+            doer = request.doer
+
+        return doer
 
     class Meta:
         verbose_name = _('Order')
