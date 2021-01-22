@@ -8,6 +8,11 @@ class DoerRequestInline(admin.StackedInline):
     model = DoerRequest
 
 
+@admin.register(DoerRequest)
+class DoerRequestAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['request', ]

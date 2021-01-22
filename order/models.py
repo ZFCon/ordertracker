@@ -5,7 +5,7 @@ from django.conf import settings
 
 class DoerRequest(models.Model):
     order = models.ForeignKey(
-        'Order', on_delete=models.CASCADE, related_name='requests')
+        'Order', on_delete=models.CASCADE, related_name='requests', validators=[])
 
     class Status(models.TextChoices):
         PENDING = 'pending', _('Pending')
@@ -16,6 +16,9 @@ class DoerRequest(models.Model):
 
     doer = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.get_status_display()
 
 
 class Order(models.Model):

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import *
+from user.serializers import UserSerializer
 
 
 class DoerRequestSerializer(serializers.ModelSerializer):
@@ -12,9 +13,9 @@ class DoerRequestSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    owner = serializers.StringRelatedField()
-    doer = serializers.StringRelatedField()
-    requests = DoerRequestSerializer(many=True)
+    owner = UserSerializer(default=serializers.CurrentUserDefault())
+    doer = serializers.StringRelatedField(read_only=True)
+    requests = DoerRequestSerializer(many=True, read_only=True)
 
     class Meta:
         model = Order
