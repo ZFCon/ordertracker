@@ -15,6 +15,7 @@ channels-redis = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
 jedi = "==0.17.2"
+drf-nested-routers = "*"
 
 [requires]
 python_version = "3.7"
