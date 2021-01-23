@@ -17,6 +17,8 @@ class DoerRequest(models.Model):
     doer = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
 
+    created = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.get_status_display()
 
@@ -25,6 +27,8 @@ class Order(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE, related_name='orders')
     request = models.TextField(help_text=_('Say what you want.'))
+
+    created = models.DateTimeField(auto_now_add=True)
 
     @property
     def doer(self):

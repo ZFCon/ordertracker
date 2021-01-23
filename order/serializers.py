@@ -10,7 +10,8 @@ User = get_user_model()
 
 
 class DoerRequestSerializer(serializers.ModelSerializer):
-    doer_details = UserSerializer(source='doer', read_only=True)
+    doer_details = serializers.StringRelatedField(
+        source='doer', read_only=True)
     doer = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(), default=serializers.CurrentUserDefault())
 
@@ -31,8 +32,6 @@ class OrderSerializer(serializers.ModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(), default=serializers.CurrentUserDefault())
 
-    doer_details = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(), default=serializers.CurrentUserDefault())
     doer = serializers.StringRelatedField(read_only=True)
 
     requests = DoerRequestSerializer(many=True, read_only=True)
