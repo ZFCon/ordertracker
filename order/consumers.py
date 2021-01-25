@@ -56,6 +56,28 @@ class OrderConsumer(JsonWebsocketConsumer):
         self.send_json(content=content)
 
     @staticmethod
+    @receiver(signals.post_delete, sender=DoerRequest)
+    def request_observer_deleted(sender, instance, **kwargs):
+        layer = get_channel_layer()
+
+        async_to_sync(layer.group_send)('orders', {
+            'type': 'order.saved',
+            'created': False,
+            'id': instance.order_id,
+        })
+
+    @staticmethod
+    @receiver(signals.post_save, sender=DoerRequest)
+    def request_observer_saved(sender, instance, **kwargs):
+        layer = get_channel_layer()
+
+        async_to_sync(layer.group_send)('orders', {
+            'type': 'order.saved',
+            'created': False,
+            'id': instance.order_id,
+        })
+
+    @staticmethod
     @receiver(signals.post_save, sender=Order)
     def order_observer_saved(sender, instance, created, **kwargs):
         layer = get_channel_layer()
