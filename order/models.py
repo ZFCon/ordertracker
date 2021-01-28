@@ -3,14 +3,16 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
 
+class Status(models.TextChoices):
+    PENDING = 'pending', _('Pending')
+    ACCEPTED = 'accepted', _('Accepted')
+    REFUSED = 'refused', _('Refused')
+
+
 class DoerRequest(models.Model):
     order = models.ForeignKey(
         'Order', on_delete=models.CASCADE, related_name='requests', validators=[])
 
-    class Status(models.TextChoices):
-        PENDING = 'pending', _('Pending')
-        ACCEPTED = 'accepted', _('Accepted')
-        REFUSED = 'refused', _('Refused')
     status = models.CharField(
         max_length=25, choices=Status.choices, default=Status.PENDING)
 
@@ -34,7 +36,7 @@ class Order(models.Model):
     def doer(self):
         doer = None
         request = self.requests.filter(
-            status=DoerRequest.Status.ACCEPTED).first()
+            status=Status.ACCEPTED).first()
 
         if(request):
             doer = request.doer

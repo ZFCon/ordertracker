@@ -2,8 +2,7 @@ from rest_framework import serializers
 
 from .models import *
 from .serializer_defaults import OrderUrlDefault
-from .validators import HasDoderValidator
-from user.serializers import UserSerializer
+from .validators import HasDoderValidator, StatusHasDoderValidator
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -14,7 +13,6 @@ class DoerRequestSerializer(serializers.ModelSerializer):
         source='doer', read_only=True)
     doer = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(), default=serializers.CurrentUserDefault())
-
     order = serializers.PrimaryKeyRelatedField(
         queryset=Order.objects.all(), default=OrderUrlDefault())
 
@@ -23,6 +21,7 @@ class DoerRequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
         validators = [
             HasDoderValidator('order'),
+            StatusHasDoderValidator('status')
         ]
 
 
