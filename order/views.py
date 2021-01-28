@@ -22,8 +22,3 @@ class DoerRequestView(ModelViewSet):
         queryset = super().get_queryset()
 
         return queryset.filter(order=self.kwargs['order_pk'])
-
-    # def post(self, request, *args, **kwargs):
-    #     request.data['order'] = self.kwargs['order_pk']
-
-    #     return super().post(request, *args, **kwargs)
