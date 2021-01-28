@@ -68,7 +68,7 @@ class StatusHasDoderValidator:
 
             if (value == Status.ACCEPTED) and has_doer:
                 raise ValidationError(
-                    _("you can't accept another request because this order already had doer."))
+                    _("you can't accept this request because this order already had a doer."))
 
     def __repr__(self):
         return '<%s(field=%s)>' % (
