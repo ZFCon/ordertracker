@@ -57,7 +57,7 @@ class StatusHasDoderValidator:
     def has_doer(self, serializer):
         instance = serializer.instance
 
-        return instance.doer is not None
+        return instance.order.doer is not None
 
     def __call__(self, attrs, serializer):
         is_update = self.is_update(serializer)
