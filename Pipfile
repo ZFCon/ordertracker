@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 pycodestyle = "*"
 autopep8 = "*"
+pylint = "*"
 
 [packages]
 django = "*"
@@ -16,6 +17,8 @@ djangorestframework = "*"
 django-cors-headers = "*"
 jedi = "==0.17.2"
 drf-nested-routers = "*"
+psycopg2-binary = "*"
+python-decouple = "*"
 
 [requires]
 python_version = "3.7"
