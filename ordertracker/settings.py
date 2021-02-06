@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis', # GeoDjango
 
     # My installations
     'channels',
@@ -110,7 +111,7 @@ CHANNEL_LAYERS = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': config('DATABASE_NAME', 'ordertracker'),
         'USER': config('DATABASE_USER', 'postgres'),
         'PASSWORD': config('DATABASE_PASSWORD', ''),

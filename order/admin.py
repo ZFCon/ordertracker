@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.gis.admin import OSMGeoAdmin
 
 from .models import *
 
@@ -14,7 +15,7 @@ class DoerRequestAdmin(admin.ModelAdmin):
 
 
 @admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
+class OrderAdmin(OSMGeoAdmin):
     list_display = ['request', ]
     readonly_fields = ['doer']
     inlines = [DoerRequestInline, ]

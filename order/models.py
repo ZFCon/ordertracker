@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.gis.db.models import PointField
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
@@ -29,6 +30,8 @@ class Order(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE, related_name='orders')
     request = models.TextField(help_text=_('Say what you want.'))
+
+    location = PointField(null=True)
 
     created = models.DateTimeField(auto_now_add=True)
 
