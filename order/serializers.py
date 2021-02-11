@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework_gis.serializers import GeoModelSerializer
 
 from .models import *
 from .serializer_defaults import OrderUrlDefault
@@ -8,7 +9,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class DoerRequestSerializer(serializers.ModelSerializer):
+class DoerRequestSerializer(GeoModelSerializer):
     doer_details = serializers.StringRelatedField(
         source='doer', read_only=True)
     doer = serializers.PrimaryKeyRelatedField(

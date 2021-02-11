@@ -19,6 +19,7 @@ jedi = "==0.17.2"
 drf-nested-routers = "*"
 psycopg2-binary = "*"
 python-decouple = "*"
+djangorestframework-gis = "*"
 
 [requires]
 python_version = "3.7"
